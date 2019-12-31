@@ -4,12 +4,16 @@ import { Link } from "react-router-dom";
 // connect react component with redux
 import { connect } from "react-redux";
 
+import { createStructuredSelector } from "reselect";
+
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
 import { auth } from "../../firebase/firebase.utils";
 
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import { selectCartHidden } from "../../redux/cart/cart.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 import "./header.styles.scss";
 
@@ -41,9 +45,16 @@ const Header = ({ currentUser, hidden }) => (
 );
 
 // getting state from root reducer
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  currentUser,
-  hidden
+// method 1
+// const mapStateToProps = state => ({
+//   currentUser: selectCurrentUser(state),
+//   hidden: selectCartHidden(state)
+// });
+
+// method 2 using createStructuredSelector
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden
 });
 
 // connect is hoc component that takes 2 argu & returns a hoc
